@@ -1,8 +1,10 @@
 ---
 shared:
-  image: python:2
+  image: google/cloud-sdk:159.0.0
 
 jobs:
   main:
+    image: python:2
     steps:
+      - app_engine_libs: . ./setup.sh
       - test: make test
