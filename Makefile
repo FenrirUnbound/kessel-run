@@ -14,3 +14,9 @@ venv: venv/bin/activate
 
 lib: venv requirements.txt
 	. venv/bin/activate; pip install -t lib -Ur requirements.txt
+
+deploy: clean
+	test -d venv || virtualenv venv
+	. venv/bin/activate; pip install -t lib -Ur requirements.txt
+	touch venv/bin/activate
+	. venv/bin/activate; gcloud app deploy app.yaml --project kesselrun-iv
