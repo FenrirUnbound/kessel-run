@@ -8,3 +8,5 @@ jobs:
     steps:
       - app_engine_libs: . ./setup.sh
       - test: make test
+    secrets:
+      - TOKEN

@@ -1,0 +1,4 @@
+cron:
+- description: sampling of traffic data
+  url: /timings/1
+  schedule: every hour
