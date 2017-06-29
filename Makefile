@@ -1,5 +1,11 @@
+ifeq ("${CI}","true")
+  SDK_PATH=./google_appengine
+else
+  SDK_PATH="$(HOME)/google-cloud-sdk"
+endif
+
 test: venv lib
-	. venv/bin/activate; nosetests -v ./tests
+	. venv/bin/activate; nosetests --with-gae --gae-lib-root=${SDK_PATH} -v ./tests
 
 clean:
 	find . -name "*.pyc" -exec rm -rf {} \;
