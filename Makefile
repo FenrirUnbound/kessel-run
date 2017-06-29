@@ -1,7 +1,7 @@
 ifeq ("${CI}","true")
   SDK_PATH=./google_appengine
 else
-  SDK_PATH="$(HOME)/google-cloud-sdk"
+  SDK_PATH="$(HOME)/Git/google-cloud-sdk/platform/google_appengine"
 endif
 
 test: venv lib
