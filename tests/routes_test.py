@@ -26,7 +26,7 @@ class RoutesTest(unittest.TestCase):
                 {
                     'id': 1,
                     'name': 'Valley Fair',
-                    'origin': '701 1st Avenue, Sunnyvale, CA',
+                    'origin': '701 1st Avenue, Sunnyvale, CA 94089',
                     'destination': '2855 Stevens Creek Blvd, Santa Clara, CA 95050'
                 }
             ]
@@ -44,7 +44,7 @@ class RoutesTest(unittest.TestCase):
             'data': {
                 'id': 1,
                 'name': 'Valley Fair',
-                'origin': '701 1st Avenue, Sunnyvale, CA',
+                'origin': '701 1st Avenue, Sunnyvale, CA 94089',
                 'destination': '2855 Stevens Creek Blvd, Santa Clara, CA 95050'
             }
         })
