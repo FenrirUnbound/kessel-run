@@ -1,5 +1,5 @@
 test: venv lib
-	. venv/bin/activate; nosetests -v ./tests
+	. venv/bin/activate; nosetests --with-gae --gae-lib-root=${HOME}/Git/google-cloud-sdk/platform/google_appengine -v ./tests
 
 clean:
 	find . -name "*.pyc" -exec rm -rf {} \;
