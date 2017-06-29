@@ -1,11 +1,13 @@
 from flask import Flask
 
+from controllers.routes import routes_route
 from controllers.status import status_route
 
 def get_app():
     application = Flask('kessel-run')
 
     routes = [
+        routes_route,
         status_route
     ]
 
