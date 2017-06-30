@@ -1,8 +1,10 @@
 import json
 import unittest
 
+from datetime import datetime, timedelta
 from google.appengine.ext import testbed
 from main import app
+from models.timing import Timing
 
 class RoutesTest(unittest.TestCase):
     def setUp(self):
@@ -54,3 +56,50 @@ class RoutesTest(unittest.TestCase):
         response = self.app.get(endpoint)
 
         self.assertEqual(response.status_code, 404)
+
+    def test_fetch_day_timings(self):
+        now = datetime.now()
+        for i in range(3):
+            diff = timedelta(minutes=10)
+            timestamp = now - (diff * i)
+
+            Timing(create_time=timestamp, distance='10.0 mi', duration=1234+i).put()
+
+        endpoint = '/api/v1/routes/1/day'
+        response = self.app.get(endpoint)
+
+        self.assertEqual(response.status_code, 200)
+
+        body = json.loads(response.data)
+
+        self.assertDictEqual(body, {
+            'data': [
+                {
+                    'distance': '10.0 mi',
+                    'duration': 1236
+                },
+                {
+                    'distance': '10.0 mi',
+                    'duration': 1235
+                },
+                {
+                    'distance': '10.0 mi',
+                    'duration': 1234
+                }
+            ]
+        })
+
+    def test_fetch_timings_amount_for_past_day(self):
+        now = datetime.now()
+        for i in range(150):
+            diff = timedelta(minutes=10)
+            timestamp = now - (diff * i)
+
+            Timing(create_time=timestamp, distance='10.0 mi', duration=1234+i).put()
+
+        endpoint = '/api/v1/routes/1/day'
+        response = self.app.get(endpoint)
+        self.assertEqual(response.status_code, 200)
+
+        body = json.loads(response.data)
+        self.assertEqual(len(body['data']), 144)
