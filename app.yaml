@@ -3,7 +3,7 @@ api_version: 1
 threadsafe: true
 
 handlers:
-- url: /timings/*
+- url: /api/v1/timings/*
   script: main.app
   login: admin
 - url: /.*

@@ -1,4 +1,4 @@
 cron:
 - description: sampling of traffic data
   url: /api/v1/timings/1
-  schedule: every hour
+  schedule: every 10 minutes
