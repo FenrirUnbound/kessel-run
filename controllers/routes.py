@@ -1,5 +1,6 @@
 from flask import Blueprint
 from models.route import Route
+from models.timing import Timing
 
 import json
 
@@ -37,3 +38,20 @@ def get_route(route_id):
     }
 
     return json.dumps(result)
+
+
+@routes_route.route('/routes/<int:route_id>/day')
+def get_day_timings(route_id):
+    timing_data = Timing.get_past_day()
+    data = []
+    for datapoint in timing_data:
+        data.append({
+            'distance': datapoint.distance,
+            'duration': datapoint.duration
+        })
+
+    result = {
+        'data': data
+    }
+
+    return json.dumps({ 'data': data }), 200
