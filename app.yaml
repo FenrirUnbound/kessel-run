@@ -16,6 +16,9 @@ handlers:
 - url: /styles/*
   static_dir: public/styles
   secure: always
+- url: /images/*
+  static_dir: public/images
+  secure: always
 - url: /
   static_files: public/day.html
   upload: public/day.html
