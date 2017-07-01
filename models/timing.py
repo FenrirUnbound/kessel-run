@@ -10,7 +10,8 @@ class Timing(ndb.Model):
     duration = ndb.IntegerProperty()
 
     @classmethod
-    def get_past_day(cls):
+    def get_past_day(cls, route_id):
         now = datetime.now() - timedelta(days=1)
+        ancestor = ndb.Key('Route', route_id)
 
-        return Timing.query(Timing.create_time > now).order(-Timing.create_time).fetch(MAX_FETCH)
+        return Timing.query(Timing.create_time > now, ancestor=ancestor).order(Timing.create_time).fetch(MAX_FETCH)
