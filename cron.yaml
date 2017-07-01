@@ -2,3 +2,6 @@ cron:
 - description: sampling of traffic data
   url: /api/v1/timings/1
   schedule: every 10 minutes
+- description: sampling of route 2 data
+  url: /api/v1/timings/2
+  schedule: every 10 minutes
