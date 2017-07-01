@@ -4,12 +4,24 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Kessel Run</title>
-    <link rel="stylesheet" src="//cdnjs.cloudflare.com/ajax/libs/dygraph/2.0.0/dygraph.min.css" />
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/dygraph/2.0.0/dygraph.css" />
+    <link rel="stylesheet" href="/styles/day.css" />
   </head>
 <body>
   <h1>Kessel Run</h1>
+  <h2 class="slogan">Getting you home in less than 12 parsecs</h2>
 
-  <div id="graphdiv"></div>
+  <div>
+    <span class="contribute">[<a href="https://github.com/FenrirUnbound/kessel-run">Contribute to this project</a>]</span>
+  </div>
+
+  <form>
+    <span class="form-label">Source: Oath</span>
+    <span class="form-label">Destination: Home</span>
+  </form>
+
+  <div id="graph-container"></div>
+
   <script src="//cdnjs.cloudflare.com/ajax/libs/dygraph/2.0.0/dygraph.min.js"></script>
   <script src="/scripts/main.js"></script>
 </body>

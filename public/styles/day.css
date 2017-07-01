@@ -1,0 +1,38 @@
+body {
+  font: 10px sans-serif;
+  padding: 10px;
+}
+
+h1 {
+  color: #333;
+  font-size: 64px;
+  font-weight: 300;
+  background-color: #FFF;
+  margin-top: 0px;
+  margin-bottom: 0px;
+  padding: 10px 0px;
+}
+
+.contribute {
+  font: 14px sans-serif;
+  float: right;
+}
+
+.form-label {
+  font: 30px "Helvetica Neue", Helvetica, sans-serif;
+  margin-left: 20px;
+}
+
+.slogan {
+  margin: 20px 0px;
+  padding: 10px;
+  background-color: #F5F5F5;
+  font-style: italic;
+}
+
+#graph-container {
+  font: 10px "Helvetica Neue", Helvetica, sans-serif;
+  width: 960px;
+  height: 480px;
+  margin-top: 20px;
+}
