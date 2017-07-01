@@ -29,6 +29,7 @@ class TimingsTest(unittest.TestCase):
                 'duration': { 'value': 9999 }   # default duration
             }
         ]
+        # todo: assert parameters
         mock_gmaps.return_value.directions.return_value = map_payload
 
         endpoint = '/api/v1/timings/1'
