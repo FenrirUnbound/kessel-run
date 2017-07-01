@@ -2,7 +2,7 @@ import json
 import unittest
 
 from datetime import datetime, timedelta
-from google.appengine.ext import testbed
+from google.appengine.ext import ndb, testbed
 from main import app
 from models.timing import Timing
 
@@ -14,6 +14,24 @@ class RoutesTest(unittest.TestCase):
         self.testbed.init_datastore_v3_stub()
         self.testbed.init_memcache_stub()
         self.app = app.test_client()
+
+    def tearDown(self):
+        self.app = None
+        self.testbed.deactivate()
+
+    def helper_populate_datastore(self, num_of_elements, route_id):
+        parent_key = ndb.Key('Route', route_id)
+        now = datetime.now()
+        time_interval = timedelta(minutes=10)
+
+        elements = []
+        for i in range(num_of_elements):
+            timestamp = now - (time_interval * i)
+
+            current = Timing(parent=parent_key, create_time=timestamp, distance='10.0 mi', duration=1234+i)
+            elements.append(current)
+
+        return ndb.put_multi(elements)
 
     def test_list_routes(self):
         endpoint = '/api/v1/routes'
@@ -62,10 +80,10 @@ class RoutesTest(unittest.TestCase):
     def test_fetch_day_timings(self):
         now = datetime.now()
         time_interval = timedelta(minutes=10)
-        for i in range(3):
-            timestamp = now - (time_interval * i)
+        self.helper_populate_datastore(num_of_elements=3, route_id=1)
 
-            Timing(create_time=timestamp, distance='10.0 mi', duration=1234+i).put()
+        # unreleated data in the set
+        Timing(parent=ndb.Key('Route', 2), create_time=now, distance='9.9 mi', duration=5555).put()
 
         endpoint = '/api/v1/routes/1/day'
         response = self.app.get(endpoint)
@@ -79,8 +97,8 @@ class RoutesTest(unittest.TestCase):
             'data': [
                 {
                     'distance': '10.0 mi',
-                    'duration': 1234,
-                    'timestamp': now.strftime('%s')
+                    'duration': 1236,
+                    'timestamp': (now - (time_interval * 2)).strftime('%s')
                 },
                 {
                     'distance': '10.0 mi',
@@ -89,23 +107,49 @@ class RoutesTest(unittest.TestCase):
                 },
                 {
                     'distance': '10.0 mi',
-                    'duration': 1236,
-                    'timestamp': (now - (time_interval * 2)).strftime('%s')
+                    'duration': 1234,
+                    'timestamp': now.strftime('%s')
                 }
             ]
         })
 
     def test_fetch_timings_amount_for_past_day(self):
         now = datetime.now()
+        parent_key = ndb.Key('Route', 5)
+        # dummy data
+        Timing(parent=ndb.Key('Route', 7), create_time=now, distance='9.9 mi', duration=5555).put()
+
+        # target test data
         for i in range(150):
             diff = timedelta(minutes=10)
             timestamp = now - (diff * i)
 
-            Timing(create_time=timestamp, distance='10.0 mi', duration=1234+i).put()
+            Timing(parent=parent_key, create_time=timestamp, distance='10.0 mi', duration=1234+i).put()
 
-        endpoint = '/api/v1/routes/1/day'
+        endpoint = '/api/v1/routes/5/day'
         response = self.app.get(endpoint)
         self.assertEqual(response.status_code, 200)
 
         body = json.loads(response.data)
         self.assertEqual(len(body['data']), 144)
+        for element in body['data']:
+            self.assertEqual(element['distance'], '10.0 mi')
+
+    def test_fetch_cache(self):
+        test_keys = self.helper_populate_datastore(num_of_elements=3, route_id=1)
+
+        Timing(parent=ndb.Key('Route', 2), create_time=datetime.now(), distance='9.9 mi', duration=5555).put()
+
+        endpoint = '/api/v1/routes/1/day'
+        response = self.app.get(endpoint)
+        body = json.loads(response.data)
+
+        self.assertEqual(len(body['data']), 3)
+
+        ndb.delete_multi(test_keys)
+
+        response = self.app.get(endpoint)
+        self.assertEqual(response.status_code, 200)
+
+        body = json.loads(response.data)
+        self.assertEqual(len(body['data']), 3)
