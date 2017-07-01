@@ -28,10 +28,4 @@ deploy: clean
 	test -d venv || virtualenv venv
 	. venv/bin/activate; pip install -t lib -Ur requirements.txt
 	touch venv/bin/activate
-	. venv/bin/activate; gcloud app deploy app.yaml --project kesselrun-iv
-
-cron: clean
-	test -d venv || virtualenv venv
-	. venv/bin/activate; pip install -t lib -Ur requirements.txt
-	touch venv/bin/activate
-	. venv/bin/activate; gcloud app deploy cron.yaml --project kesselrun-iv
+	. venv/bin/activate; gcloud app deploy app.yaml index.yaml cron.yaml --project kesselrun-iv
