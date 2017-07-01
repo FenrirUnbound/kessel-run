@@ -10,6 +10,8 @@ handlers:
   script: main.app
 - url: /scripts/*
   static_dir: public/scripts
+- url: /styles/*
+  static_dir: public/styles
 - url: /
   static_files: public/day.html
   upload: public/day.html
