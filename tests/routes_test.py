@@ -61,9 +61,9 @@ class RoutesTest(unittest.TestCase):
 
     def test_fetch_day_timings(self):
         now = datetime.now()
+        time_interval = timedelta(minutes=10)
         for i in range(3):
-            diff = timedelta(minutes=10)
-            timestamp = now - (diff * i)
+            timestamp = now - (time_interval * i)
 
             Timing(create_time=timestamp, distance='10.0 mi', duration=1234+i).put()
 
@@ -79,15 +79,18 @@ class RoutesTest(unittest.TestCase):
             'data': [
                 {
                     'distance': '10.0 mi',
-                    'duration': 1236
+                    'duration': 1234,
+                    'timestamp': now.strftime('%s')
                 },
                 {
                     'distance': '10.0 mi',
-                    'duration': 1235
+                    'duration': 1235,
+                    'timestamp': (now - (time_interval * 1)).strftime('%s')
                 },
                 {
                     'distance': '10.0 mi',
-                    'duration': 1234
+                    'duration': 1236,
+                    'timestamp': (now - (time_interval * 2)).strftime('%s')
                 }
             ]
         })

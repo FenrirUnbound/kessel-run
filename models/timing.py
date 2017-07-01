@@ -13,4 +13,4 @@ class Timing(ndb.Model):
     def get_past_day(cls):
         now = datetime.now() - timedelta(days=1)
 
-        return Timing.query(Timing.create_time > now).fetch(MAX_FETCH)
+        return Timing.query(Timing.create_time > now).order(-Timing.create_time).fetch(MAX_FETCH)
