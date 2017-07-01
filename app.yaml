@@ -6,8 +6,11 @@ handlers:
 - url: /api/v1/timings/*
   script: main.app
   login: admin
-- url: /.*
+- url: /api/v1/*
   script: main.app
+- url: .*
+  static_files: public/day.html
+  upload: public/day.html
 
 libraries:
 - name: ssl
