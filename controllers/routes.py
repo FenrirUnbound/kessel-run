@@ -1,4 +1,4 @@
-from flask import Blueprint
+from flask import Blueprint, Response
 from models.route import Route
 from models.timing import Timing
 
@@ -7,9 +7,18 @@ import json
 route_data = Route()
 routes_route = Blueprint('routes', __name__)
 
+def reply_payload(payload, status_code=200):
+    result = {
+        'data': payload
+    }
+
+    body = json.dumps(result)
+
+    return Response(body, status=status_code, mimetype='application/json')
+
 @routes_route.route('/routes')
 def list_routes():
-    data = []
+    result = []
 
     for i in range(1):
         item = {
@@ -17,41 +26,29 @@ def list_routes():
         }
 
         item.update(route_data.get(i))
-        data.append(item)
+        result.append(item)
 
-    result = {
-        'data': data
-    }
-
-    return json.dumps(result)
+    return reply_payload(result)
 
 @routes_route.route('/routes/<int:route_id>')
 def get_route(route_id):
     if route_id <= 0 or route_id > route_data.size:
         return '', 404
 
-    data = route_data.get(route_id - 1)
-    data['id'] = route_id
+    result = route_data.get(route_id - 1)
+    result['id'] = route_id
 
-    result = {
-        'data': data
-    }
-
-    return json.dumps(result)
+    return reply_payload(result)
 
 
 @routes_route.route('/routes/<int:route_id>/day')
 def get_day_timings(route_id):
     timing_data = Timing.get_past_day()
-    data = []
+    result = []
     for datapoint in timing_data:
-        data.append({
+        result.append({
             'distance': datapoint.distance,
             'duration': datapoint.duration
         })
 
-    result = {
-        'data': data
-    }
-
-    return json.dumps({ 'data': data }), 200
+    return reply_payload(result)

@@ -20,6 +20,7 @@ class RoutesTest(unittest.TestCase):
         response = self.app.get(endpoint)
 
         self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.headers['Content-Type'], 'application/json')
 
         body = json.loads(response.data)
 
@@ -39,6 +40,7 @@ class RoutesTest(unittest.TestCase):
         response = self.app.get(endpoint)
 
         self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.headers['Content-Type'], 'application/json')
 
         body = json.loads(response.data)
 
@@ -69,6 +71,7 @@ class RoutesTest(unittest.TestCase):
         response = self.app.get(endpoint)
 
         self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.headers['Content-Type'], 'application/json')
 
         body = json.loads(response.data)
 
