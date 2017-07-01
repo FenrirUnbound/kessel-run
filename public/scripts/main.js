@@ -8,7 +8,7 @@ function handleError(err) {
 function fetchData() {
   return fetch('/api/v1/routes/1/day')
   .then(data => data.json())
-  .then(data => data.data.reverse())  // todo: remove reverse operation
+  .then(data => data.data)
 }
 
 function fetchRouteData() {
