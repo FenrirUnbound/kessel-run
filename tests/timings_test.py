@@ -2,6 +2,7 @@ import json
 import mock
 import unittest
 
+from google.appengine.ext import ndb
 from google.appengine.ext import testbed
 from main import app
 from models.timing import Timing
@@ -36,7 +37,8 @@ class TimingsTest(unittest.TestCase):
         response = self.app.get(endpoint)
         self.assertEqual(response.status_code, 204)
 
-        query_results = Timing.query().fetch(2)
+        key = ndb.Key('Route', 1)
+        query_results = Timing.query(ancestor=key).fetch(2)
         self.assertEqual(len(query_results), 1)
 
         test_data = query_results.pop()
