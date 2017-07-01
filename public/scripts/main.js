@@ -6,22 +6,41 @@ function fetchData() {
   .then(data => data.data);
 }
 
-function formatData(data) {
-  const result = ['timestamp,duration\n'];
+function fetchRouteData() {
+  return fetch('/api/v1/routes')
+  .then(data => data.json())
+  .then(data => data.data);
+}
 
-  data.forEach((datapoint) => {
+function formatData(data) {
+  return data.map((datapoint) => {
     const timestamp = new Date(datapoint.timestamp * 1000);
 
-    result.push(`${timestamp},${datapoint.duration}\n`);
+    return [
+      timestamp,
+      datapoint.duration
+    ];
   });
-
-  return result.join('');
 }
 
-function graphData(data) {
-  const g = new Dygraph(document.getElementById('graphdiv'), data);
+function formatRouteData(routeData) {
+  return routeData.map((item) => {
+    return item.name;
+  });
 }
 
-fetchData()
-.then(formatData)
+function graphData([trafficData, routeData]) {
+  const g = new Dygraph(
+    document.getElementById('graphdiv'),
+    trafficData,
+    {
+      labels: ['Time'].concat(routeData),
+      legend: 'always'
+    });
+}
+
+Promise.all([
+    fetchData().then(formatData),
+    fetchRouteData().then(formatRouteData)
+])
 .then(graphData);
