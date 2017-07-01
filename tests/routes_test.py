@@ -46,7 +46,7 @@ class RoutesTest(unittest.TestCase):
             'data': [
                 {
                     'id': 1,
-                    'name': 'Valley Fair',
+                    'name': 'Santa Clara',
                     'origin': '701 1st Avenue, Sunnyvale, CA 94089',
                     'destination': '2855 Stevens Creek Blvd, Santa Clara, CA 95050'
                 }
@@ -65,7 +65,7 @@ class RoutesTest(unittest.TestCase):
         self.assertDictEqual(body, {
             'data': {
                 'id': 1,
-                'name': 'Valley Fair',
+                'name': 'Santa Clara',
                 'origin': '701 1st Avenue, Sunnyvale, CA 94089',
                 'destination': '2855 Stevens Creek Blvd, Santa Clara, CA 95050'
             }
@@ -80,12 +80,12 @@ class RoutesTest(unittest.TestCase):
     def test_fetch_day_timings(self):
         now = datetime.now()
         time_interval = timedelta(minutes=10)
-        self.helper_populate_datastore(num_of_elements=3, route_id=1)
+        self.helper_populate_datastore(num_of_elements=3, route_id=11)
 
         # unreleated data in the set
         Timing(parent=ndb.Key('Route', 2), create_time=now, distance='9.9 mi', duration=5555).put()
 
-        endpoint = '/api/v1/routes/1/day'
+        endpoint = '/api/v1/routes/11/day'
         response = self.app.get(endpoint)
 
         self.assertEqual(response.status_code, 200)
@@ -93,6 +93,7 @@ class RoutesTest(unittest.TestCase):
 
         body = json.loads(response.data)
 
+        self.assertEqual(len(body['data']), 3)
         self.assertDictEqual(body, {
             'data': [
                 {
