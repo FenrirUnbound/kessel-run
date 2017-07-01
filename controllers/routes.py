@@ -48,7 +48,8 @@ def get_day_timings(route_id):
     for datapoint in timing_data:
         result.append({
             'distance': datapoint.distance,
-            'duration': datapoint.duration
+            'duration': datapoint.duration,
+            'timestamp': datapoint.create_time.strftime('%s')
         })
 
     return reply_payload(result)
