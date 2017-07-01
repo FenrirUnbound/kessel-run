@@ -6,15 +6,20 @@ handlers:
 - url: /api/v1/timings/*
   script: main.app
   login: admin
+  secure: always
 - url: /api/v1/.*
   script: main.app
+  secure: always
 - url: /scripts/*
   static_dir: public/scripts
+  secure: always
 - url: /styles/*
   static_dir: public/styles
+  secure: always
 - url: /
   static_files: public/day.html
   upload: public/day.html
+  secure: always
 
 libraries:
 - name: ssl
