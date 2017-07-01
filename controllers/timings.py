@@ -1,4 +1,5 @@
 import googlemaps
+import time
 import json
 
 from flask import Blueprint
@@ -21,12 +22,14 @@ def pull_data(map_data):
 @timings_route.route('/timings/<int:route_id>')
 def measure_timing(route_id):
     route = route_data.get(route_id - 1)
+    now = int(time.time())
     token = Secret.token()
     gmaps = googlemaps.Client(key=token)
 
     map_data = gmaps.distance_matrix(
         origins=route['origin'],
         destinations=route['destination'],
+        departure_time=now,
         mode='driving',
         units='imperial'
         )
