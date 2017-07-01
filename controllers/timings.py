@@ -1,39 +1,15 @@
-import googlemaps
-import time
 import json
 
 from flask import Blueprint
-from models.route import Route
-from models.secret import Secret
 from models.timing import Timing
+from services.gmaps import Gmaps
 
-route_data = Route()
 timings_route = Blueprint('timings', __name__)
-
-def pull_data(map_data):
-    element = map_data['rows'].pop()
-    matrix_data = element['elements'].pop()
-
-    return {
-        'distance': matrix_data['distance']['text'],
-        'duration': matrix_data['duration']['value']
-    }
 
 @timings_route.route('/timings/<int:route_id>')
 def measure_timing(route_id):
-    route = route_data.get(route_id - 1)
-    now = int(time.time())
-    token = Secret.token()
-    gmaps = googlemaps.Client(key=token)
-
-    map_data = gmaps.distance_matrix(
-        origins=route['origin'],
-        destinations=route['destination'],
-        departure_time=now,
-        mode='driving',
-        units='imperial'
-        )
-    result = pull_data(map_data)
+    google_maps = Gmaps()
+    result = google_maps.lookup_travel_time(route_id=route_id-1)
 
     Timing(distance=result['distance'], duration=result['duration']).put()
 

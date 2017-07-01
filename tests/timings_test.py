@@ -15,21 +15,21 @@ class TimingsTest(unittest.TestCase):
         self.testbed.init_memcache_stub()
         self.app = app.test_client()
 
-    @mock.patch('controllers.timings.googlemaps.Client')
+    @mock.patch('services.gmaps.googlemaps.Client')
     def test_mark_route_datapoint(self, mock_gmaps):
-        map_payload = {
-            'rows': [
-                {
-                    'elements': [
-                        {
-                            'distance': { 'text': 'distance' },
-                            'duration': { 'value': 1111 }
-                        }
-                    ]
-                }
-            ]
-        }
-        mock_gmaps.return_value.distance_matrix.return_value = map_payload
+        map_payload = [
+            {
+                'summary': 'US-101 S',
+                'legs': [
+                    {
+                        'distance': { 'text': 'distance' },
+                        'duration_in_traffic': { 'value': 1111 }
+                    }
+                ],
+                'duration': { 'value': 9999 }   # default duration
+            }
+        ]
+        mock_gmaps.return_value.directions.return_value = map_payload
 
         endpoint = '/api/v1/timings/1'
         response = self.app.get(endpoint)
