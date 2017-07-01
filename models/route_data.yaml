@@ -2,3 +2,5 @@
 routes:
   - name: Santa Clara
     destination: '2855 Stevens Creek Blvd, Santa Clara, CA 95050'
+  - name: S. San Jose
+    destination: '1 Curtner Avenue, San Jose, CA 95125'
