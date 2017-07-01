@@ -21,6 +21,9 @@ venv: venv/bin/activate
 lib: venv requirements.txt
 	. venv/bin/activate; pip install -t lib -Ur requirements.txt
 
+local: lib
+	dev_appserver.py app.yaml
+
 deploy: clean
 	test -d venv || virtualenv venv
 	. venv/bin/activate; pip install -t lib -Ur requirements.txt
