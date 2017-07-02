@@ -49,6 +49,12 @@ class RoutesTest(unittest.TestCase):
                     'name': 'Santa Clara',
                     'origin': '701 1st Avenue, Sunnyvale, CA 94089',
                     'destination': '2855 Stevens Creek Blvd, Santa Clara, CA 95050'
+                },
+                {
+                    'id': 2,
+                    'name': 'S. San Jose',
+                    'origin': '701 1st Avenue, Sunnyvale, CA 94089',
+                    'destination': '1 Curtner Avenue, San Jose, CA 95125'
                 }
             ]
         })
