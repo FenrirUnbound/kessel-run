@@ -45,7 +45,7 @@ def reply_payload(payload, status_code=200):
 def list_routes():
     result = []
 
-    for i in range(1):
+    for i in range(route_data.size):
         item = {
             'id': i + 1
         }
